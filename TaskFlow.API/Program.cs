@@ -1,33 +1,34 @@
 
-namespace TaskFlow.API;
 
-public class Program
-{
-    public static void Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
+using TaskFlow.Application.Interfaces;
+using TaskFlow.Application.Mappings;
+using TaskFlow.Application.Services;
+using TaskFlow.Infrastructure;
 
-        // Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        builder.Services.AddOpenApi();
+builder.Services.AddControllers();
 
-        var app = builder.Build();
+builder.Services.AddEndpointsApiExplorer();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.MapOpenApi();
-        }
+builder.Services.AddSwaggerGen();
 
-        app.UseHttpsRedirection();
+builder.Services.AddInfrastructure(builder.Configuration);
 
-        app.UseAuthorization();
+builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
 
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
-        app.MapControllers();
+var app = builder.Build();
 
-        app.Run();
-    }
-}
+app.UseSwagger();
+
+app.UseSwaggerUI();
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
