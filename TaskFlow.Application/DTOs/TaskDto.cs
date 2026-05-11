@@ -1,9 +1,11 @@
-using TaskFlow.Domain.Common;
 using TaskFlow.Domain.Enums;
 
-namespace TaskFlow.Domain.Entities;
-public class TaskItem : BaseEntity
+namespace TaskFlow.Application.DTOs;
+
+public class TaskDto
 {
+    public Guid Id { get; set; }
+
     public string Title { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;
@@ -12,9 +14,7 @@ public class TaskItem : BaseEntity
 
     public TaskPriority Priority { get; set; }
 
-    public Enums.TaskStatuses Status { get; set; }
+    public TaskStatuses Status { get; set; }
 
     public Guid ProjectId { get; set; }
-
-    public Project Project { get; set; } = null!;
 }

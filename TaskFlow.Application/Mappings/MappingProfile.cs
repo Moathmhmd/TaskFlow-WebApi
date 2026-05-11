@@ -11,5 +11,9 @@ public class MappingProfile : Profile
         CreateMap<Project, ProjectDto>().ReverseMap();
 
         CreateMap<CreateProjectDto, Project>().ReverseMap();
+
+        CreateMap<TaskItem, TaskDto>().ReverseMap();
+
+        CreateMap<CreateTaskDto, TaskItem>().ReverseMap();
     }
 }

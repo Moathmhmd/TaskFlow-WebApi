@@ -24,19 +24,66 @@ public class ProjectsController : ControllerBase
         var projects = await _service.GetAllAsync();
 
         return Ok(new ApiResponse<IEnumerable<ProjectDto>>(
-        true,
-        "Projects retrieved successfully",
-        projects));
+            true,
+            "Projects retrieved successfully",
+            projects));
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var project = await _service.GetByIdAsync(id);
+
+        return Ok(new ApiResponse<ProjectDto>(
+            true,
+            "Project retrieved successfully",
+            project));
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateProjectDto dto)
+    public async Task<IActionResult> Create(
+        CreateProjectDto dto)
     {
-        await _service.CreateAsync(dto);
+        var createdProject =
+            await _service.CreateAsync(dto);
 
-        return Ok(new ApiResponse<string>(
-         true,
-         "Project created successfully",
-         null));
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = createdProject.Id },
+            new ApiResponse<ProjectDto>(
+                true,
+                "Project created successfully",
+                createdProject));
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(
+        Guid id,
+        UpdateProjectDto dto)
+    {
+        await _service.UpdateAsync(id, dto);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _service.DeleteAsync(id);
+
+        return NoContent();
+    }
+
+    [HttpGet("tasks/{id:guid}")]
+    public async Task<IActionResult> GetProjectTasks(
+    Guid id)
+    {
+        var tasks =
+            await _service.GetProjectTasksAsync(id);
+
+        return Ok(new ApiResponse<IEnumerable<TaskDto>>(
+            true,
+            "Project tasks retrieved successfully",
+            tasks));
     }
 }

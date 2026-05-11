@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
+using TaskFlow.Application.Common;
+using TaskFlow.Application.Common.Exceptions;
 
 namespace TaskFlow.API.Middlewares;
 
@@ -37,14 +39,43 @@ public class ExceptionMiddleware
     {
         context.Response.ContentType = "application/json";
 
-        context.Response.StatusCode =
-            (int)HttpStatusCode.InternalServerError;
+        var response = new ErrorResponse();
 
-        var response = new
+        switch (exception)
         {
-            StatusCode = context.Response.StatusCode,
-            Message = exception.Message
-        };
+            case BadRequestException:
+                context.Response.StatusCode =
+                    (int)HttpStatusCode.BadRequest;
+
+                response.StatusCode = context.Response.StatusCode;
+                response.Message = exception.Message;
+                break;
+
+            case NotFoundException:
+                context.Response.StatusCode =
+                    (int)HttpStatusCode.NotFound;
+
+                response.StatusCode = context.Response.StatusCode;
+                response.Message = exception.Message;
+                break;
+
+            case UnauthorizedException:
+                context.Response.StatusCode =
+                    (int)HttpStatusCode.Unauthorized;
+
+                response.StatusCode = context.Response.StatusCode;
+                response.Message = exception.Message;
+                break;
+
+            default:
+                context.Response.StatusCode =
+                    (int)HttpStatusCode.InternalServerError;
+
+                response.StatusCode = context.Response.StatusCode;
+                response.Message =
+                    "An unexpected error occurred";
+                break;
+        }
 
         var json = JsonSerializer.Serialize(response);
 

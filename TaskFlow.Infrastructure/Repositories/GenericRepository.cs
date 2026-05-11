@@ -1,10 +1,12 @@
-using global::TaskFlow.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using TaskFlow.Application.Interfaces;
 using TaskFlow.Infrastructure.Data;
 
 namespace TaskFlow.Infrastructure.Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T>
+public class GenericRepository<T>
+    : IGenericRepository<T>
     where T : class
 {
     private readonly AppDbContext _context;
@@ -22,6 +24,14 @@ public class GenericRepository<T> : IGenericRepository<T>
         return await _dbSet.ToListAsync();
     }
 
+    public async Task<IEnumerable<T>> FindAsync(
+        Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet
+            .Where(predicate)
+            .ToListAsync();
+    }
+
     public async Task<T?> GetByIdAsync(Guid id)
     {
         return await _dbSet.FindAsync(id);
@@ -32,18 +42,14 @@ public class GenericRepository<T> : IGenericRepository<T>
         await _dbSet.AddAsync(entity);
     }
 
-    public async Task UpdateAsync(T entity)
+    public void Update(T entity)
     {
         _dbSet.Update(entity);
-
-        await Task.CompletedTask;
     }
 
-    public async Task DeleteAsync(T entity)
+    public void Delete(T entity)
     {
         _dbSet.Remove(entity);
-
-        await Task.CompletedTask;
     }
 
     public async Task SaveChangesAsync()

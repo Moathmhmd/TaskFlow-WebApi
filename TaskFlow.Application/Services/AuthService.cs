@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using TaskFlow.Application.Common.Exceptions;
 using TaskFlow.Application.DTOs.Auth;
 using TaskFlow.Application.Interfaces;
 using TaskFlow.Domain.Entities;
@@ -17,6 +18,9 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
     {
+        if (string.IsNullOrWhiteSpace(dto.Email))
+            throw new BadRequestException("Email is required");
+
         var user = await _userManager.FindByEmailAsync(dto.Email);
 
         if (user is null)
@@ -40,6 +44,9 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
     {
+        if (string.IsNullOrWhiteSpace(dto.Email))
+            throw new BadRequestException("Email is required");
+
         var existingUser = await _userManager.FindByEmailAsync(dto.Email);
 
         if (existingUser is not null)

@@ -6,7 +6,12 @@ public interface IProjectService
 {
     Task<IEnumerable<ProjectDto>> GetAllAsync();
 
-    Task<ProjectDto?> GetByIdAsync(Guid id);
+    Task<ProjectDto> GetByIdAsync(Guid id);
 
-    Task CreateAsync(CreateProjectDto dto);
+    Task<ProjectDto> CreateAsync(CreateProjectDto dto);
+
+    Task UpdateAsync(Guid id, UpdateProjectDto dto);
+
+    Task DeleteAsync(Guid id);
+    Task<IEnumerable<TaskDto>> GetProjectTasksAsync(Guid projectId);
 }
