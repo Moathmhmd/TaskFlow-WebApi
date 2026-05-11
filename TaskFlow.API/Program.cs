@@ -1,8 +1,5 @@
-
-
-using TaskFlow.Application.Interfaces;
-using TaskFlow.Application.Mappings;
-using TaskFlow.Application.Services;
+using Microsoft.OpenApi;
+using TaskFlow.Application;
 using TaskFlow.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,23 +8,49 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1",
+        new OpenApiInfo
+        {
+            Title = "TaskFlow API",
+            Version = "v1"
+        });
 
+    options.AddSecurityDefinition("Bearer",
+        new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "Enter JWT Token"
+        });
+
+});
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
+builder.Services.AddApplication();
 
-builder.Services.AddScoped<IProjectService, ProjectService>();
 
 var app = builder.Build();
 
-app.UseSwagger();
 
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 
+
+app.UseAuthentication();
+
 app.UseAuthorization();
+
 
 app.MapControllers();
 
