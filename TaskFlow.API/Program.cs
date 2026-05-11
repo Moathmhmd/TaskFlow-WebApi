@@ -1,4 +1,5 @@
 using Microsoft.OpenApi;
+using TaskFlow.API.Extensions;
 using TaskFlow.Application;
 using TaskFlow.Infrastructure;
 
@@ -46,6 +47,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCustomExceptionMiddleware();
 
 app.UseAuthentication();
 

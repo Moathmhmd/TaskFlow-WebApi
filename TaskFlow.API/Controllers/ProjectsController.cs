@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskFlow.Application.Common;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.Interfaces;
 
@@ -22,7 +23,10 @@ public class ProjectsController : ControllerBase
     {
         var projects = await _service.GetAllAsync();
 
-        return Ok(projects);
+        return Ok(new ApiResponse<IEnumerable<ProjectDto>>(
+        true,
+        "Projects retrieved successfully",
+        projects));
     }
 
     [HttpPost]
@@ -30,6 +34,9 @@ public class ProjectsController : ControllerBase
     {
         await _service.CreateAsync(dto);
 
-        return Ok();
+        return Ok(new ApiResponse<string>(
+         true,
+         "Project created successfully",
+         null));
     }
 }
