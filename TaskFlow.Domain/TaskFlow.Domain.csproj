@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
-    <Folder Include="Entities\" />
-    <Folder Include="Enums\" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.15" />
   </ItemGroup>
+
+	
 
 </Project>

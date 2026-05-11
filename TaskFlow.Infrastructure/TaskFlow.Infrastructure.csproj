@@ -23,8 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Configurations\" />
     <Folder Include="Identity\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
