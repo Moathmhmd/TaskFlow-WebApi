@@ -19,7 +19,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<ApiResponse<IEnumerable<ProjectDto>>>> GetAll()
     {
         var projects = await _service.GetAllAsync();
 
@@ -30,7 +30,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<ActionResult<ApiResponse<ProjectDto>>> GetById(Guid id)
     {
         var project = await _service.GetByIdAsync(id);
 
@@ -41,7 +41,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(
+    public async Task<ActionResult<ApiResponse<ProjectDto>>> Create(
         CreateProjectDto dto)
     {
         var createdProject =
@@ -57,7 +57,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(
+    public async Task<ActionResult> Update(
         Guid id,
         UpdateProjectDto dto)
     {
@@ -67,7 +67,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
         await _service.DeleteAsync(id);
 
@@ -75,7 +75,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet("tasks/{id:guid}")]
-    public async Task<IActionResult> GetProjectTasks(
+    public async Task<ActionResult<ApiResponse<IEnumerable<TaskDto>>>> GetProjectTasks(
     Guid id)
     {
         var tasks =

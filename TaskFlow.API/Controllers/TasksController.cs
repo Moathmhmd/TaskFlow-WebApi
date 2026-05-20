@@ -20,7 +20,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] TaskStatuses? status, [FromQuery] TaskPriority? priority)
+    public async Task<ActionResult<ApiResponse<IEnumerable<TaskDto>>>> GetAll([FromQuery] TaskStatuses? status, [FromQuery] TaskPriority? priority)
     {
         var tasks =
             await _service.GetAllAsync(
@@ -34,7 +34,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<ActionResult<ApiResponse<TaskDto>>> GetById(Guid id)
     {
         var task = await _service.GetByIdAsync(id);
 
@@ -45,7 +45,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateTaskDto dto)
+    public async Task<CreatedAtActionResult> Create(CreateTaskDto dto)
     {
         var createdTask =
             await _service.CreateAsync(dto);
@@ -60,7 +60,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateTaskDto dto)
+    public async Task<NoContentResult> Update(Guid id, UpdateTaskDto dto)
     {
         await _service.UpdateAsync(id, dto);
 
@@ -68,7 +68,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpPatch("status/{id:guid}")]
-    public async Task<IActionResult> UpdateStatus(Guid id, UpdateTaskStatusDto dto)
+    public async Task<NoContentResult> UpdateStatus(Guid id, UpdateTaskStatusDto dto)
     {
         await _service.UpdateStatusAsync(id, dto);
 
@@ -76,7 +76,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<NoContentResult> Delete(Guid id)
     {
         await _service.DeleteAsync(id);
 
